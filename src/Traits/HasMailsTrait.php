@@ -9,7 +9,7 @@ trait HasMailsTrait
 {
     public function mails(): MorphToMany
     {
-        return $this->morphToMany(config('mails.model'), 'mailable', 'mailables', 'mailable_id', 'mail_id');
+        return $this->morphToMany(config('mails.models.mail'), 'mailable', 'mailables', 'mailable_id', 'mail_id');
     }
 
     public function events(): HasManyThrough

@@ -14,6 +14,11 @@ return [
         'attachment' => MailAttachment::class,
     ],
 
+    'mailable' => [
+        // 'model' => User::class,
+        'email_field' => 'email',
+    ],
+
     // Table names for saving sent emails and polymorphic relations to database
 
     'table_names' => [

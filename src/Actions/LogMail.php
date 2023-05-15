@@ -26,6 +26,8 @@ class LogMail
             $mail->save();
 
             $this->collectAttachments($mail, $event->message->getAttachments());
+
+            $this->attachMailable($mail);
         }
 
         if ($event instanceof MessageSent) {
@@ -132,5 +134,23 @@ class LogMail
     public function getAttachmentStoragePath(string $filename): string
     {
         return rtrim(config('mails.logging.attachments.root'), '/').'/'.$filename;
+    }
+
+    public function attachMailable($mail, $email_address = null): void
+    {
+        if (! config('mails.mailable.model')) {
+            return;
+        }
+
+        if (! $email_address) {
+            $email_address = array_key_first($mail->to);
+        }
+
+        $mailableModel = config('mails.mailable.model')::where(config('mails.mailable.email_field'), $email_address)->first();
+
+        if ($mailableModel && method_exists($mailableModel, 'mails') ) {
+            $mailableModel->mails()->attach($mail);
+        }
+
     }
 }
